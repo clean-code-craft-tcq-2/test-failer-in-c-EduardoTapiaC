@@ -1,5 +1,10 @@
 #include <stdio.h>
 #include <assert.h>
+typedef struct {
+    enum MajorColor majorColor;
+    enum MinorColor minorColor;
+} ColorPair;
+
 
 int printColorMap() {
     const char* majorColor[] = {"White", "Red", "Black", "Yellow", "Violet"};
@@ -13,8 +18,14 @@ int printColorMap() {
     return i * j;
 }
 
+
+testAlignmentgetColorFromMap(){
+    assert(getColorFromMap((1,1) )
+}
+
 int main() {
     int result = printColorMap();
+    testgetColorFromMap();
     assert(result == 25);
     printf("All is well (maybe!)\n");
     return 0;
