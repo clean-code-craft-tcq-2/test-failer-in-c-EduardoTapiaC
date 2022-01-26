@@ -2,16 +2,13 @@
 #include <assert.h>
 
 enum shirtSize {
+    tooSmall = 33,
     small = 34,
     medium = 38,
     large = 42,
     xlarge = 46,
-}shoulderSize;
-
-#define SIZE_S 34
-#define SIZE_M 38
-#define SIZE_L 42
-#define SIZE_XL 46
+    tooLarge = 50,
+}shoulderStartSize;
 
 char size(int cms) {
     char sizeName = '\0';
@@ -26,23 +23,21 @@ char size(int cms) {
 }
 
 void testOversizeToFit() {
-    assert(size(small) == "M");
-    assert(size(large) == "L");
+    assert(size(medium) == 'M');
+    assert(size(large) == 'L');
 }
-void testUnavailableSize() {
-    assert(size(small) != "S");
-    assert(size(medium) != "M");
-    assert(size(large) != "L");
-    assert(size(xlarge) != "XL");
-}
+void testInvalidSize() {
+    assert(size(small) == 'S');
+    assert(size(medium) == 'M');
+    assert(size(large) == 'L');
+    assert(size(xlarge) == 'U');
+    assert(size(tooSmall) == 'N');
+    assert(size(tooLarge) == 'N');
+} 
 
 int main() {
-    assert(size(36) == "S");
-    assert(size(40) == "M");
-    assert(size(44) == "L");
-    assert(size(47) == "XL");
     testOversizeToFit();
-    testUnavailableSize();
+    testInvalidSize();
     printf("All is well (maybe!)\n");
     return 0;
 }
