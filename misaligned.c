@@ -40,7 +40,7 @@ int printColorMap() {
 
 void testPairNumberAlignment() {
     assert(getPairNumberFromIndex(WHITE, BLUE) == 1);
-    assert(getPairNumberFromIndex(VIOLET,SLATE) == 25);
+    assert(getPairNumberFromIndex(VIOLET, SLATE) == 25);
 }
 
 void testColorsFromPairNumber() {
