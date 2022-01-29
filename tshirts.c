@@ -12,12 +12,16 @@ enum shirtSize {
 
 char size(int cms) {
     char sizeName = '\0';
-    if(cms < 38) {
+    if(cms <= tooSmall || cms >= tooLarge ) {
+        sizeName = 'N';
+    } else if(cms >= small && cms < medium) {
         sizeName = 'S';
-    } else if(cms > 38 && cms < 42) {
+    } else if(cms >= medium && cms < large) {
         sizeName = 'M';
-    } else if(cms > 42) {
+    } else if(cms >= large && cms < xlarge) {
         sizeName = 'L';
+    } else if(cms >= xlarge) {
+        sizeName = 'U';
     }
     return sizeName;
 }

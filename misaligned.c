@@ -4,6 +4,9 @@
 const char* majorColor[] = {"White", "Red", "Black", "Yellow", "Violet"};
 const char* minorColor[] = {"Blue", "Orange", "Green", "Brown", "Slate"};
 
+int numberOfMajorColors = sizeof(majorColor) / sizeof(majorColor[0]);
+int numberOfMinorColors = sizeof(minorColor) / sizeof(minorColor[0]);
+
 enum MajorColor {WHITE, RED, BLACK, YELLOW, VIOLET};
 enum MinorColor {BLUE, ORANGE, GREEN, BROWN, SLATE};
 
@@ -14,13 +17,18 @@ typedef struct {
 
 ColorPair getColorsFromPairNumber(int pairNumber) {
     ColorPair colorPair;
-    colorPair.majorColor = (enum MajorColor)(pairNumber);
-    colorPair.minorColor = (enum MinorColor)(pairNumber);
+    int zeroBasedPairNumber = pairNumber - 1;
+    colorPair.majorColor = (enum MajorColor)(zeroBasedPairNumber / numberOfMajorColors);
+    colorPair.minorColor = (enum MinorColor)(zeroBasedPairNumber % numberOfMinorColors);
     return colorPair;
 }
 
 int getPairNumberFromIndex(int MajorColorIndex, int MinorColorIndex) {
-    return MajorColorIndex * 5 + MinorColorIndex;
+    return MajorColorIndex * 5 + MinorColorIndex + 1;
+}
+
+void formatedPrint(int pairNumber, ColorPair colorPair) {
+    printf("%-3d | %-8s | %-8s\n",pairNumber, majorColor[colorPair.majorColor], minorColor[colorPair.minorColor]);
 }
 
 int printColorMap() {
@@ -30,13 +38,12 @@ int printColorMap() {
     for(i = 0; i < 5; i++) {
         for(j = 0; j < 5; j++) {
             pairNumber = getPairNumberFromIndex(i,j);
-            colorPair = getColorsFromPairNumber(i);
-            printf("%d | %s | %s\n",pairNumber, majorColor[colorPair.majorColor], minorColor[colorPair.minorColor]);
+            colorPair = getColorsFromPairNumber(pairNumber);
+            formatedPrint(pairNumber, colorPair);
         }
     }
     return i * j;
 }
-
 
 void testPairNumberAlignment() {
     assert(getPairNumberFromIndex(WHITE, BLUE) == 1);
