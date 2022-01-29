@@ -1,31 +1,47 @@
 #include <stdio.h>
 #include <assert.h>
 
-int alertFailureCount = 0;
+#define HEAT_THRESHOLD_CELSIUS 200
 
-int networkAlertStub(float celcius) {
-    printf("ALERT: Temperature is %.1f celcius.\n", celcius);
-    // Return 200 for ok
+#define USE_STUBS 1
+
+    
+#if (USE_STUBS == 1)
+    //we could create networkstub.c/h and redirect call to stub
+    #define networkAlert(celsius) networkAlertStub(celsius)
+#endif
+// this would also go into networkstub.c
+int networkAlertStub(float celsius) {
+    printf("ALERT: Temperature is %.1f celsius.\n", celsius);
     // Return 500 for not-ok
-    // stub always succeeds and returns 200
+    if(celsius > HEAT_THRESHOLD_CELSIUS) 
+    {
+        return 500;
+    }
+    // stub succeeds and returns 200
     return 200;
 }
 
-void alertInCelcius(float farenheit) {
-    float celcius = (farenheit - 32) * 5 / 9;
-    int returnCode = networkAlertStub(celcius);
+int alertFailureCount = 0;
+
+void alertInCelsius(float farenheit) {
+    float celsius = (farenheit - 32) * 5 / 9;
+    int returnCode = networkAlert(celsius);
     if (returnCode != 200) {
-        // non-ok response is not an error! Issues happen in life!
-        // let us keep a count of failures to report
-        // However, this code doesn't count failures!
-        // Add a test below to catch this bug. Alter the stub above, if needed.
-        alertFailureCount += 0;
+        alertFailureCount += 1;
     }
 }
 
+void testAlertInCelsius() {
+    alertFailureCount = 0;
+    alertInCelsius(400.5);
+    alertInCelsius(303.6);
+    assert(alertFailureCount == 1);
+    alertFailureCount = 0;
+}
+
 int main() {
-    alertInCelcius(400.5);
-    alertInCelcius(303.6);
+    testAlertInCelsius();
     printf("%d alerts failed.\n", alertFailureCount);
     printf("All is well (maybe!)\n");
     return 0;
